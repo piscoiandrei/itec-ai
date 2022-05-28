@@ -41,6 +41,7 @@ def get_color_and_area(img):
 def compute_kmeans():
     init()
     paths = files = os.listdir('images/')
+    data = []
     for path in paths:
         image = cv2.imread(f'images/{path}')
         # convert to RGB
@@ -64,5 +65,5 @@ def compute_kmeans():
         # reshape back to the original image dimension
         segmented_image = segmented_image.reshape(image.shape)
         color, area = get_color_and_area(segmented_image)
-        print(color, area)
-        Image.fromarray(segmented_image).save(f'kmean_img/{path}')
+        data.append((path, color, area))
+    return data
