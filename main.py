@@ -14,6 +14,7 @@ def timing(f):
         print('{:s} function took {:.5f} s'.format(f.__name__,
                                                    (time2 - time1)))
         return ret
+
     return wrap
 
 
@@ -35,7 +36,7 @@ def rand3():
     y0 = random.randint(zone * 2, SIZE - zone * 2)
     args = [0, y0 - zone * 2] if y0 > SIZE - y0 else [y0 + zone * 2, SIZE]
     y1 = random.randint(*args)
-    x2 = random.randint(min(x0, x1) + zone, max(x0, x1) - zone)
+    x2 = random.randint(min(x0, x1) + zone - 1, max(x0, x1) - zone)
     midy = (y0 + y1) // 2
     args = [0, midy - zone * 2] if midy > SIZE - midy else [midy + zone * 2,
                                                             SIZE]
