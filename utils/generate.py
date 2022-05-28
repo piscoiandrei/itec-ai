@@ -62,8 +62,8 @@ def gen_shape(shape_type, color, uid):
         noise_img.putalpha(90)
         img.paste(noise_img, (0, 0), noise_img)
 
-    percentage = area / TOTAL_AREA * 100
-    path = f"images/{uid}-{shape_type}-{color}-{percentage:.2f}.png"
+    percentage = area / TOTAL_AREA
+    path = f"images/{uid}-{shape_type}-{color}-{percentage:.6f}.png"
     img.save(path)
 
 
