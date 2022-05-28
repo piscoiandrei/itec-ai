@@ -59,7 +59,7 @@ def gen_shape(shape_type, color, uid):
         noise = np.rint(noise * 255)
         np_img = np_img + noise
         noise_img = Image.fromarray(np.uint8(np_img))
-        noise_img.putalpha(90)
+        noise_img.putalpha(30)
         img.paste(noise_img, (0, 0), noise_img)
 
     percentage = area / TOTAL_AREA
