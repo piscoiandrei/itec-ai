@@ -1,7 +1,10 @@
+# generation settings
 zone = 10
 TRIANGLE = "triangle"
 RECTANGLE = "rectangle"
 ELLIPSE = "ellipse"
+SEQ_SIZE = 100  # how many of each shape to generate in a process
+NUM_PROCESSES = 30
 SHAPES = [TRIANGLE, RECTANGLE, ELLIPSE]
 COLORS = {
     "red": "#ff0000",
