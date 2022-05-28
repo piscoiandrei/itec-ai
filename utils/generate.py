@@ -32,7 +32,7 @@ def rand3():
     return [(x0, y0), (x1, y1), (x2, y2)]
 
 
-def gen_shape(shape_type, color, uid):
+def gen_shape(shape_type, color, uid, noise):
     img = Image.new(mode="RGB", size=(SIZE, SIZE), color="black")
     img_draw = ImageDraw.Draw(img)
     if shape_type == ELLIPSE:
@@ -52,6 +52,10 @@ def gen_shape(shape_type, color, uid):
         area = (p2[0] - p1[0]) * (p2[1] - p1[1])
         img_draw.rectangle([p1, p2], fill=COLORS[color])
 
+    if noise:
+        noise_img = Image.effect_noise((SIZE, SIZE), 25)
+        noise_img.putalpha(100)
+        img.paste(noise_img, (0, 0), noise_img)
     percentage = area / TOTAL_AREA * 100
     path = f"images/{uid}-{shape_type}-{color}-{percentage:.2f}.png"
     # with open('data.txt', 'a') as f:
@@ -71,22 +75,22 @@ def init():
         pass
 
 
-def generate_each(n):
+def generate_each(n, noise):
     start = n * SEQ_SIZE
     stop = start + SEQ_SIZE
     for i in range(start, stop):
-        gen_shape(TRIANGLE, random.choice(["red", "blue", "green"]), i)
+        gen_shape(TRIANGLE, random.choice(["red", "blue", "green"]), i, noise)
     for i in range(start, stop):
-        gen_shape(RECTANGLE, random.choice(["red", "blue", "green"]), i)
+        gen_shape(RECTANGLE, random.choice(["red", "blue", "green"]), i, noise)
     for i in range(start, stop):
-        gen_shape(ELLIPSE, random.choice(["red", "blue", "green"]), i)
+        gen_shape(ELLIPSE, random.choice(["red", "blue", "green"]), i, noise)
 
 
-def generate():
+def generate(noise):
     init()
     processes = []
     for k in range(NUM_PROCESSES):
-        proc = mp.Process(target=generate_each, args=(k,))
+        proc = mp.Process(target=generate_each, args=(k, noise))
         processes.append(proc)
         proc.start()
     for p in processes:
