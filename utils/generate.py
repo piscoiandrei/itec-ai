@@ -1,5 +1,5 @@
 import multiprocessing as mp
-
+import numpy as np
 from PIL import Image, ImageDraw
 import random
 import os
@@ -53,9 +53,15 @@ def gen_shape(shape_type, color, uid):
         img_draw.rectangle([p1, p2], fill=COLORS[color])
 
     if random.choice([True, False]):
-        noise_img = Image.effect_noise((SIZE, SIZE), 25)
-        noise_img.putalpha(100)
+        np_img = np.array(
+            Image.new(mode="RGB", size=(SIZE, SIZE), color="black"))
+        noise = np.random.uniform(0, 1, np_img.shape)
+        noise = np.rint(noise * 100)
+        np_img = np_img + noise
+        noise_img = Image.fromarray(np.uint8(np_img))
+        noise_img.putalpha(127)
         img.paste(noise_img, (0, 0), noise_img)
+
     percentage = area / TOTAL_AREA * 100
     path = f"images/{uid}-{shape_type}-{color}-{percentage:.2f}.png"
     img.save(path)
