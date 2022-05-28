@@ -1,18 +1,41 @@
 import os
+import shutil
 import cv2
 import numpy as np
 from PIL import Image
 
+from utils.settings import TOTAL_AREA
+
 
 def init():
     try:
-        os.remove('kmean_img')
+        shutil.rmtree('kmean_img')
     except OSError:
         pass
     try:
         os.mkdir('kmean_img')
     except OSError:
         pass
+
+
+def get_color_and_area(img):
+    counter = {}
+    for row in img:
+        for pixel in row:
+            key = " ".join([str(p) for p in pixel])
+            if key in counter:
+                counter[key] += 1
+            else:
+                counter[key] = 1
+    colors_rgb = []
+    for key in counter.keys():
+        colors_rgb.append([int(x) for x in key.split(' ')])
+    mx_color_pixel = colors_rgb[0] if max(colors_rgb[0]) > max(
+        colors_rgb[1]) else colors_rgb[1]
+    colors = ["red", "green", "blue"]
+    return colors[mx_color_pixel.index(max(mx_color_pixel))], counter[" ".join(
+        [str(p) for p in mx_color_pixel]
+    )] / TOTAL_AREA
 
 
 def compute_kmeans():
@@ -40,4 +63,6 @@ def compute_kmeans():
         segmented_image = centers[labels.flatten()]
         # reshape back to the original image dimension
         segmented_image = segmented_image.reshape(image.shape)
+        color, area = get_color_and_area(segmented_image)
+        print(color, area)
         Image.fromarray(segmented_image).save(f'kmean_img/{path}')

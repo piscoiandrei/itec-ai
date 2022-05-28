@@ -101,9 +101,9 @@ def generate():
 
     file_paths = os.listdir("./images/")
     with open('data.txt', 'a') as f:
-        print(len(file_paths))
         for path in file_paths:
             data = path[:-4].split('-')
             f.write(f"images/{path},{SHAPE_CODES[data[1]]},"
                     f" {COLOR_CODES[data[2]]}, "
                     f"{data[3]}\n")
+    return len(file_paths)
